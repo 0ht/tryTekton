@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: date-multi-step
+spec:
+  steps:
+  - name: ubuntu
+    image: ubuntu
+    command:
+    - sh
+    - -c
+    - |
+      date
+      sleep 10
+      date
+  - name: centos
+    image: centos
+    command:
+    - sh
+    - -c
+    - |
+      date
+      sleep 10
+      date
