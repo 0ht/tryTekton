@@ -1,17 +1,20 @@
 # Tektonを試行する
 
 Tektonを導入し、あるアプリケーションの
-・アプリケーションビルド
-・コンテナービルド
-・デプロイ
+- アプリケーションビルド
+- コンテナービルド
+- デプロイ
 を行うパイプラインを作成し、実行してみる。
 
 
-Tektonの導入
-導入先のk8sは、MacのDocker　Desktop提供のk8s
+## Tektonの導入
+導入先のk8sは、MacのDocker　Desktop提供のk8sクラスター
 
 以下のファイルのapplyで導入
 
+`kubectl apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml`
+
+```
 (⎈ |docker-desktop:default)eb82649:tryTekton eb82649@jp.ibm.com$ kubectl apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml
 namespace/tekton-pipelines created
 podsecuritypolicy.policy/tekton-pipelines created
@@ -37,23 +40,31 @@ configmap/config-logging created
 configmap/config-observability created
 deployment.apps/tekton-pipelines-controller created
 deployment.apps/tekton-pipelines-webhook created
+```
 
 以下のpodのステータスがRunningとなっている事で稼働確認を行う。
 
+```
 (⎈ |docker-desktop:default)eb82649:tryTekton eb82649@jp.ibm.com$ kubectl get pods --namespace tekton-pipelines
 NAME                                           READY   STATUS    RESTARTS   AGE
 tekton-pipelines-controller-857f9f4dd9-dbsv9   1/1     Running   0          36s
 tekton-pipelines-webhook-844f844f47-sbpzc      1/1     Running   0          36s
+```
+
+## hello-world タスクを実行してみる
 
 taskを作成
+```
 (⎈ |docker-desktop:default)eb82649:task eb82649@jp.ibm.com$ kubectl apply -f task-echo-hello-world.yaml 
 task.tekton.dev/echo-hello-world created
 
 (⎈ |docker-desktop:default)eb82649:task eb82649@jp.ibm.com$ kubectl get task
 NAME               AGE
 echo-hello-world   2m5s
+```
 
 taskrunを作成（実行）
+```
 (⎈ |docker-desktop:default)eb82649:task eb82649@jp.ibm.com$ kubectl apply -f taskrun-echo-hello-world.yaml
 taskrun.tekton.dev/echo-hello-world-task-run created
 
@@ -67,16 +78,22 @@ echo-hello-world-task-run-pod-b8c449   0/1     Completed   0          70s
 
 (⎈ |docker-desktop:default)eb82649:task eb82649@jp.ibm.com$ kubectl logs echo-hello-world-task-run-pod-b8c449
 hello world
+```
 
-##アプリビルドのタスク
+hello worldが表示され、動いたことが確認できた。
+taskを作って、taskrunで実行する。
 
+
+## アプリビルドのタスクを作ってみる
+```
 docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn clean install
-
--it ターミナルを使用してインタラクティブに実行
--rm 終了時にコンテナーを削除
---name コンテナーに名前をアサイン
--v ボリュームをマウント
--w コンテナー内のワーキングディレクトリ
+```
+オプション説明
+- -it ターミナルを使用してインタラクティブに実行
+- -rm 終了時にコンテナーを削除
+- --name コンテナーに名前をアサイン
+- -v ボリュームをマウント
+- -w コンテナー内のワーキングディレクトリ
 
 これをうまくタスク化したい。
 ボリュームのマウントが必要なので、やはりPV/PVCの定義は必要か
