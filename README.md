@@ -51,6 +51,11 @@ tekton-pipelines-controller-857f9f4dd9-dbsv9   1/1     Running   0          36s
 tekton-pipelines-webhook-844f844f47-sbpzc      1/1     Running   0          36s
 ```
 
+以降、試行のシナリオごとにディレクトリ分割
+
+[hello-world タスクを実行してみる](https://github.com/0ht/tryTekton/tree/master/hello-world "hello-world タスクを実行してみる")
+
+
 ## hello-world タスクを実行してみる
 
 taskを作成
