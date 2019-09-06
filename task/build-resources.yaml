@@ -1,12 +1,12 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: git
+  name: git-remoteCallService
 spec:
   type: git
   params: 
   - name: url
-    value: https://github.com/0ht/remoteCallService
+    value: https://github.com/0ht/remoteCallService.git
   - name: revision
     value: master
 ---

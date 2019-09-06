@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: maven-build-task
+spec:
+  inputs:
+    resources:
+      - name: git #
+        type: git
+        targetPath: /gitrepo #/workspaceからの相対パス.
+  outputs:
+  steps:
+  - name: maven-build
+    image: maven:3.3-jdk-8
+    command: ["mvn"]
+    args: ["install"]
+    workingDir: "/workspace/gitrepo" #上のtagetPathと整合させる
