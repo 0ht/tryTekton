@@ -139,7 +139,7 @@ status:
     running:
       startedAt: "2019-09-06T04:36:02Z"
 ```
-gitリポジトリのコピーの処理が別コンテナーで動いている模様。
+gitリポジトリのCloneが別コンテナーで動いている模様。
 ```
 (⎈ |docker-desktop:default)eb82649:tryTekton eb82649@jp.ibm.com$ k logs maven-build-task-run-pod-632565 -c step-git-source-git-49m8j
 {"level":"warn","ts":1567744564.2113607,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/master\" is not a valid GitHub commit ID"}
