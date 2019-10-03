@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: maven-build-task-run
+spec:
+  taskRef:
+    name: maven-build-task
+  inputs:
+    resources:
+      - name: git
+        resourceRef:
+          name: git
+  
